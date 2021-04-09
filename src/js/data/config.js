@@ -1,5 +1,4 @@
 import TWEEN from '@tweenjs/tween.js';
-import { config } from 'webpack';
 
 // This object contains the state of the app
 export default {

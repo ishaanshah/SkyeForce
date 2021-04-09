@@ -10,7 +10,6 @@ import Light from './components/light';
 
 // Helpers
 import Stats from './helpers/stats';
-import MeshHelper from './helpers/meshHelper';
 
 // Model
 import Texture from './model/texture';
