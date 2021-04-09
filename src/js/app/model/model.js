@@ -1,19 +1,17 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import Material from '../components/material';
-import Helpers from '../../utils/helpers';
-import { BufferGeometryUtils } from '../../utils/bufferGeometryUtils';
-import { GLTFLoader } from '../loaders/GLTFLoader';
-import Config from '../../data/config';
+import Helpers from "../../utils/helpers";
+import { BufferGeometryUtils } from "../../utils/bufferGeometryUtils";
+import { GLTFLoader } from "../loaders/GLTFLoader";
+import Config from "../../data/config";
 
-// Loads in a single object from the config file
+// Loads in a single object from the config file (May contain multiple components)
 export default class Model {
   constructor(scene, manager, textures) {
     this.scene = scene;
     this.textures = textures;
     this.manager = manager;
 
-    this.obj = null;
     this.ref = null;
   }
 
@@ -24,31 +22,31 @@ export default class Model {
       (gltf) => {
         const scene = gltf.scene;
         let mesh;
-        if (Config.shadow.enabled) {
-          scene.traverse(function(node) {
-            if (node.isMesh || node.isLight) node.castShadow = true;
-            if (node.isMesh) {
-              node.material.wireframe = Config.mesh.wireframe;
-              mesh = node;
-              mesh.scale.multiplyScalar(modelData.scale);
-              // mesh.position.set(...modelData.position)
-            }
-          });
-        }
 
-        this.obj = mesh;
+        const nodes = [];
+        scene.traverse(function (node) {
+          if (node.isMesh || node.isLight) {
+            node.castShadow = Config.shadow.enabled;
+          }
+          if (node.isMesh) {
+            node.material.wireframe = Config.mesh.wireframe;
+            mesh = node;
+            nodes.push(node);
+          }
+        });
+
+        const group = new THREE.Group();
+        nodes.forEach((node) => group.add(node));
+        group.scale.multiplyScalar(modelData.scale);
+        group.position.set(...modelData.position);
 
         BufferGeometryUtils.computeTangents(mesh.geometry);
 
-        var group = new THREE.Group();
-        group.scale.multiplyScalar(0.25);
-        this.scene.add( group );
-
         this.ref = group;
+        this.scene.add(group);
 
         // To make sure that the matrixWorld is up to date for the boxhelpers
         group.updateMatrixWorld(true);
-        group.add(mesh);
 
         // Add to scene
         this.scene.add(scene);
@@ -61,4 +59,6 @@ export default class Model {
   unload() {
     this.scene.remove(this.ref);
   }
+
+  update() {}
 }

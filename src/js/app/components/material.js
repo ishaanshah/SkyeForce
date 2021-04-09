@@ -1,11 +1,11 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 // USe this class as a helper to set up some default materials
 export default class Material {
   constructor(color) {
     this.basic = new THREE.MeshBasicMaterial({
       color,
-      side: THREE.DoubleSide
+      side: THREE.DoubleSide,
     });
 
     this.standard = new THREE.MeshStandardMaterial({
@@ -13,10 +13,14 @@ export default class Material {
       shading: THREE.FlatShading,
       roughness: 1,
       metalness: 0,
-      side: THREE.DoubleSide
+      side: THREE.DoubleSide,
     });
 
-    this.wire = new THREE.MeshBasicMaterial({wireframe: true});
+    this.emmisive = new THREE.MeshStandardMaterial({
+      color,
+      emmisive: color,
+    });
+
+    this.wire = new THREE.MeshBasicMaterial({ wireframe: true });
   }
 }
-

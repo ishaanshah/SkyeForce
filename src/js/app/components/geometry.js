@@ -1,7 +1,7 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
-import Material from './material';
-import Config from '../../data/config';
+import Material from "./material";
+import Config from "../../data/config";
 
 // This helper class can be used to create and then place geometry in the scene
 export default class Geometry {
@@ -11,28 +11,47 @@ export default class Geometry {
   }
 
   make(type) {
-    if(type === 'plane') {
+    if (type === "plane") {
       return (width, height, widthSegments = 1, heightSegments = 1) => {
-        this.geo = new THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
+        this.geo = new THREE.PlaneGeometry(
+          width,
+          height,
+          widthSegments,
+          heightSegments
+        );
       };
     }
 
-    if(type === 'sphere') {
+    if (type === "sphere") {
       return (radius, widthSegments = 32, heightSegments = 32) => {
-        this.geo = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+        this.geo = new THREE.SphereGeometry(
+          radius,
+          widthSegments,
+          heightSegments
+        );
+      };
+    }
+
+    if (type === "cylinder") {
+      return (radius, radialSegments = 32, heightSegments = 1) => {
+        this.geo = new THREE.CylinderGeometry(
+          radius,
+          radialSegments,
+          heightSegments
+        );
       };
     }
   }
 
-  place(position, rotation) {
-    const material = new Material(0xeeeeee).standard;
+  place(position, rotation, materialType) {
+    const material = new Material(0xeeeeee);
     const mesh = new THREE.Mesh(this.geo, material);
 
     // Use ES6 spread to set position and rotation from passed in array
     mesh.position.set(...position);
     mesh.rotation.set(...rotation);
 
-    if(Config.shadow.enabled) {
+    if (Config.shadow.enabled) {
       mesh.receiveShadow = true;
     }
 

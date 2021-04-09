@@ -1,25 +1,27 @@
 // Global imports -
-import * as THREE from 'three';
-import TWEEN from '@tweenjs/tween.js';
+import * as THREE from "three";
+import TWEEN from "@tweenjs/tween.js";
 
 // Local imports -
 // Components
-import Renderer from './components/renderer';
-import Camera from './components/camera';
-import Light from './components/light';
+import Renderer from "./components/renderer";
+import Camera from "./components/camera";
+import Light from "./components/light";
 
 // Helpers
-import Stats from './helpers/stats';
+import Stats from "./helpers/stats";
 
 // Model
-import Texture from './model/texture';
-import Model from './model/model';
+import Texture from "./model/texture";
 
 // Managers
-import Interaction from './managers/interaction';
+import Interaction from "./managers/interaction";
 
 // data
-import Config from './../data/config';
+import Config from "./../data/config";
+
+// objects
+import Player from "./objects/player";
 // -- End of imports
 
 // This class instantiates and ties all of the components together, starts the loading process and renders the main loop
@@ -36,7 +38,7 @@ export default class Main {
     this.scene.fog = new THREE.FogExp2(Config.fog.color, Config.fog.near);
 
     // Get Device Pixel Ratio first for retina
-    if(window.devicePixelRatio) {
+    if (window.devicePixelRatio) {
       Config.dpr = window.devicePixelRatio;
     }
 
@@ -48,11 +50,11 @@ export default class Main {
     this.light = new Light(this.scene);
 
     // Create and place lights in scene
-    const lights = ['ambient', 'directional', 'point', 'hemi'];
+    const lights = ["ambient", "directional", "point", "hemi"];
     lights.forEach((light) => this.light.place(light));
 
     // Set up rStats if dev environment
-    if(Config.isDev && Config.isShowingStats) {
+    if (Config.isDev && Config.isShowingStats) {
       this.stats = new Stats(this.renderer);
       this.stats.setUp();
     }
@@ -65,8 +67,8 @@ export default class Main {
       this.manager = new THREE.LoadingManager();
 
       // Textures loaded, load model
-      this.playerModel = new Model(this.scene, this.manager, this.texture.textures);
-      this.playerModel.load(Config.models.player);
+      this.player = new Player(this.scene, this.manager, this.texture.textures);
+      this.player.load(Config.models.player);
 
       // onProgress callback
       this.manager.onProgress = (item, loaded, total) => {
@@ -76,21 +78,25 @@ export default class Main {
       // All loaders done now
       this.manager.onLoad = () => {
         // Set up interaction manager with the app now that the model is finished loading
-        new Interaction(this.renderer.threeRenderer, this.scene, this.camera.threeCamera);
+        new Interaction(
+          this.renderer.threeRenderer,
+          this.scene,
+          this.camera.threeCamera
+        );
 
         // Everything is now fully loaded
         Config.isLoaded = true;
-        this.container.querySelector('#loading').style.display = 'none';
+        this.container.querySelector("#loading").style.display = "none";
+
+        // Start rendering now
+        this.render();
       };
     });
-
-    // Start render which does not wait for model fully loaded
-    this.render();
   }
 
   render() {
     // Render rStats if Dev
-    if(Config.isDev && Config.isShowingStats) {
+    if (Config.isDev && Config.isShowingStats) {
       Stats.start();
     }
 
@@ -98,15 +104,16 @@ export default class Main {
     this.renderer.render(this.scene, this.camera.threeCamera);
 
     // rStats has finished determining render call now
-    if(Config.isDev && Config.isShowingStats) {
+    if (Config.isDev && Config.isShowingStats) {
       Stats.end();
     }
 
     // Delta time is sometimes needed for certain updates
-    //const delta = this.clock.getDelta();
+    const delta = this.clock.getDelta();
 
     // Call any vendor or module frame updates here
     TWEEN.update();
+    this.player.update(delta * Config.models.player.speed);
 
     // RAF
     requestAnimationFrame(this.render.bind(this)); // Bind the main class instead of window object

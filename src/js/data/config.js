@@ -1,4 +1,4 @@
-import TWEEN from '@tweenjs/tween.js';
+import TWEEN from "@tweenjs/tween.js";
 
 // This object contains the state of the app
 export default {
@@ -6,24 +6,21 @@ export default {
   isShowingStats: true,
   isLoaded: false,
   isTweening: false,
-  isRotating: true,
-  isMouseMoving: false,
-  isMouseOver: false,
   maxAnisotropy: 1,
   dpr: 1,
   easing: TWEEN.Easing.Quadratic.InOut,
   duration: 500,
-  models: { 
+  models: {
     player: {
-      path: './assets/models/playerSpaceship.glb',
+      path: "./assets/models/playerSpaceship.glb",
       scale: 1,
+      position: [0, 0, 0],
+      speed: 10,
     },
   },
   texture: {
-    path: './assets/textures/',
-    imageFiles: [
-      { name: 'UV', image: 'UV_Grid_Sm.jpg' }
-    ]
+    path: "./assets/textures/",
+    imageFiles: [{ name: "UV", image: "UV_Grid_Sm.jpg" }],
   },
   mesh: {
     enableHelper: false,
@@ -31,45 +28,24 @@ export default {
     translucent: true,
     material: {
       color: 0xffffff,
-      emissive: 0xffffff
-    }
+      emissive: 0xffffff,
+    },
   },
   fog: {
-    color: 0xffffff,
-    near: 0.0008
+    color: 0x000000,
+    near: 0.0008,
   },
   camera: {
     fov: 35,
     near: 2,
     far: 1000,
-    aspect: 16/9,
-    posX: 0,
-    posY: 5,
-    posZ: -15,
-  },
-  controls: {
-    autoRotate: false,
-    autoRotateSpeed: -0.5,
-    rotateSpeed: 0.5,
-    zoomSpeed: 0.8,
-    minDistance: 200,
-    maxDistance: 600,
-    minPolarAngle: Math.PI / 5,
-    maxPolarAngle: Math.PI / 2,
-    minAzimuthAngle: -Infinity,
-    maxAzimuthAngle: Infinity,
-    enableDamping: true,
-    dampingFactor: 0.5,
-    enableZoom: true,
-    target: {
-      x: 0,
-      y: 0,
-      z: 0
-    }
+    aspect: 16 / 9,
+    position: [0, 7.5, -20],
+    lookAt: [0, 0, 10],
   },
   ambientLight: {
     enabled: true,
-    color: 0x141414
+    color: 0x141414,
   },
   directionalLight: {
     enabled: true,
@@ -77,7 +53,7 @@ export default {
     intensity: 0.4,
     x: -75,
     y: 280,
-    z: 150
+    z: 150,
   },
   shadow: {
     enabled: true,
@@ -90,7 +66,7 @@ export default {
     top: 100,
     right: 100,
     bottom: -100,
-    left: -100
+    left: -100,
   },
   pointLight: {
     enabled: true,
@@ -99,7 +75,7 @@ export default {
     distance: 115,
     x: 0,
     y: 0,
-    z: 0
+    z: 0,
   },
   hemiLight: {
     enabled: true,
@@ -108,6 +84,6 @@ export default {
     intensity: 0.55,
     x: 0,
     y: 0,
-    z: 0
-  }
+    z: 0,
+  },
 };
