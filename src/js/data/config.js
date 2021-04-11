@@ -16,6 +16,7 @@ export default {
       scale: 1,
       position: [0, 0, 0],
       speed: 10,
+      animationInterval: 700,
     },
   },
   texture: {

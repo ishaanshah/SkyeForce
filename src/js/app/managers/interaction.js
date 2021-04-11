@@ -36,10 +36,14 @@ export default class Interaction {
 
     // Keyboard events
     this.keyboard.domElement.addEventListener("keydown", (event) => {
+      if (event.repeat) {
+        return;
+      }
+
       if (this.keyboard.pressed("a")) {
-        Store.player.direction = 1;
+        Store.player.direction = "left";
       } else if (this.keyboard.pressed("d")) {
-        Store.player.direction = -1;
+        Store.player.direction = "right";
       }
     });
   }

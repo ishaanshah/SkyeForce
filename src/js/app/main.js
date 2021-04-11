@@ -109,11 +109,11 @@ export default class Main {
     }
 
     // Delta time is sometimes needed for certain updates
-    const delta = this.clock.getDelta();
+    // const delta = this.clock.getDelta();
 
     // Call any vendor or module frame updates here
     TWEEN.update();
-    this.player.update(delta * Config.models.player.speed);
+    this.player.update();
 
     // RAF
     requestAnimationFrame(this.render.bind(this)); // Bind the main class instead of window object
