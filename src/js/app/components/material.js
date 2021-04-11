@@ -10,15 +10,9 @@ export default class Material {
 
     this.standard = new THREE.MeshStandardMaterial({
       color,
-      shading: THREE.FlatShading,
       roughness: 1,
       metalness: 0,
       side: THREE.DoubleSide,
-    });
-
-    this.emmisive = new THREE.MeshStandardMaterial({
-      color,
-      emmisive: color,
     });
 
     this.wire = new THREE.MeshBasicMaterial({ wireframe: true });

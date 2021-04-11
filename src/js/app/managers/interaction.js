@@ -45,6 +45,10 @@ export default class Interaction {
       } else if (this.keyboard.pressed("d")) {
         Store.player.direction = "right";
       }
+
+      if (this.keyboard.pressed("space")) {
+        Store.player.shoot = true;
+      }
     });
   }
 

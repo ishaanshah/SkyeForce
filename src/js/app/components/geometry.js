@@ -1,6 +1,5 @@
 import * as THREE from "three";
 
-import Material from "./material";
 import Config from "../../data/config";
 
 // This helper class can be used to create and then place geometry in the scene
@@ -33,9 +32,11 @@ export default class Geometry {
     }
 
     if (type === "cylinder") {
-      return (radius, radialSegments = 32, heightSegments = 1) => {
+      return (radius, height, radialSegments = 32, heightSegments = 1) => {
         this.geo = new THREE.CylinderGeometry(
           radius,
+          radius,
+          height,
           radialSegments,
           heightSegments
         );
@@ -43,18 +44,22 @@ export default class Geometry {
     }
   }
 
-  place(position, rotation, materialType) {
-    const material = new Material(0xeeeeee);
-    const mesh = new THREE.Mesh(this.geo, material);
+  place(position, rotation, material) {
+    this.mesh = new THREE.Mesh(this.geo, material);
 
     // Use ES6 spread to set position and rotation from passed in array
-    mesh.position.set(...position);
-    mesh.rotation.set(...rotation);
+    this.mesh.position.set(...position);
+    this.mesh.rotation.set(...rotation);
 
     if (Config.shadow.enabled) {
-      mesh.receiveShadow = true;
+      this.mesh.receiveShadow = true;
     }
 
-    this.scene.add(mesh);
+    this.scene.add(this.mesh);
+  }
+
+  unload() {
+    this.scene.remove(this.mesh);
+    this.mesh.geometry.dispose();
   }
 }

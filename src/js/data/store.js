@@ -5,5 +5,7 @@ export default {
     health: 100,
     animating: false,
     position: 0,
+    shoot: false,
+    canShoot: true,
   },
 };

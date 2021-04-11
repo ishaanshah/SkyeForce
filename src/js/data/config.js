@@ -1,5 +1,7 @@
 import TWEEN from "@tweenjs/tween.js";
 
+import Material from "../app/components/material";
+
 // This object contains the state of the app
 export default {
   isDev: false,
@@ -16,7 +18,17 @@ export default {
       scale: 1,
       position: [0, 0, 0],
       speed: 10,
-      animationInterval: 700,
+      animationInterval: 600,
+      fireRate: 3, // Six bullets per second (one per gun)
+    },
+    bullets: {
+      material: new Material(0x0000ff).standard,
+      position: [0.71, -0.7, 1],
+      rotation: [Math.PI / 2, 0, 0],
+      radius: 0.1,
+      length: 2,
+      segments: 8,
+      animationInterval: 7000,
     },
   },
   texture: {
@@ -37,12 +49,15 @@ export default {
     near: 0.0008,
   },
   camera: {
-    fov: 35,
+    fov: 15,
     near: 2,
     far: 1000,
     aspect: 16 / 9,
-    position: [0, 7.5, -20],
+    position: [0, 10, -42],
     lookAt: [0, 0, 10],
+    // Custom camera, uncomment to move around
+    // position: [20, 0, 0],
+    // lookAt: [0, 0, 0],
   },
   ambientLight: {
     enabled: true,
