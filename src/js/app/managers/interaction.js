@@ -5,11 +5,10 @@ import Store from "../../data/store";
 
 // Manages all input interactions
 export default class Interaction {
-  constructor(renderer, scene, camera) {
+  constructor(renderer, scene) {
     // Properties
     this.renderer = renderer;
     this.scene = scene;
-    this.camera = camera;
 
     this.timeout = null;
 

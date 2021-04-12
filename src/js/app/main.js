@@ -65,6 +65,10 @@ export default class Main {
       this.stats.setUp();
     }
 
+    // Instantiate score and health
+    this.health = 100;
+    this.score = 0;
+
     // Instantiate texture class
     this.texture = new Texture();
 
@@ -118,16 +122,20 @@ export default class Main {
         new Interaction(
           this.renderer.threeRenderer,
           this.scene,
-          this.camera.threeCamera
         );
 
         // Everything is now fully loaded
         Config.isLoaded = true;
-        this.container.querySelector("#loading").style.display = "none";
+        this.container.querySelector("#status").style.display = "none";
 
         setTimeout(() => {
           Store.star.canSpawn = true
         }, Config.models.star.canSpawnInterval / 2);
+
+        // TODO: Remove this
+        setInterval(() => {
+          console.log(this.score, this.health);
+        }, 3000)
 
         // Start rendering now
         this.render();
@@ -147,6 +155,14 @@ export default class Main {
     // rStats has finished determining render call now
     if (Config.isDev && Config.isShowingStats) {
       Stats.end();
+    }
+
+    if (this.health <= 0) {
+      Store.gameOver = true;
+      this.container.querySelector("#status").style.display = "initial";
+      this.container.querySelector("#status").style.fontSize = "48";
+      this.container.querySelector("#status").innerHTML = "Game Over!";
+      return;
     }
 
     // Delta time is sometimes needed for certain updates
@@ -172,7 +188,7 @@ export default class Main {
     // Player - Asteroid
     let collisions= getCollisions(this.player.ref, collidableAsteroids.map(asteroid => asteroid.ref));
     if(collisions.length > 0) {
-      // TODO: Reduce health over here
+      this.health += Config.models.asteroid.health;
     }
     collisions.forEach(asteroidIdx => {
       collidableAsteroids[asteroidIdx].unload();
@@ -182,7 +198,7 @@ export default class Main {
     // Player - Star
     collisions = getCollisions(this.player.ref, collidableStars.map(star => star.ref));
     if(collisions.length > 0) {
-      // TODO: Increase score here 
+      this.score += Config.models.star.score;
     }
     collisions.forEach(starIdx => {
       collidableStars[starIdx].unload();
@@ -192,7 +208,6 @@ export default class Main {
     // Bullet - Asteroid
     // Iterate in pairs, because bullets are stored as pairs
     for (let i = 0; i < collidableBullets.length; i += 2) {
-      // TODO: Increase score here
 
       // Delete asteroids
       const collisions = getCollisions(collidableBullets[i].ref.mesh, collidableAsteroids.map(asteroid => asteroid.ref));
@@ -200,6 +215,7 @@ export default class Main {
       collisions.forEach(asteroidIdx => {
         collidableAsteroids[asteroidIdx].unload();
         collidableAsteroids[asteroidIdx].deleted = true;
+        this.score += Config.models.asteroid.score;
       })
 
       // Delete bullets
@@ -210,6 +226,10 @@ export default class Main {
         collidableBullets[i+1].deleted = true;
       }
     }
+
+    // Update HUD
+    this.container.querySelector("#healthHUD").innerHTML = this.health;
+    this.container.querySelector("#scoreHUD").innerHTML = this.score;
 
     // RAF
     requestAnimationFrame(this.render.bind(this)); // Bind the main class instead of window object

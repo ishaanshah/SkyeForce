@@ -14,4 +14,5 @@ export default {
     shoot: false,
     canShoot: true,
   },
+  gameOver: false,
 };

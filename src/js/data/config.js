@@ -33,13 +33,16 @@ export default {
       paths: ["./assets/models/enemyAsteroid1.glb", "./assets/models/enemyAsteroid2.glb"],
       scale: 1,
       animationInterval: 6000,
-      canSpawnInterval: 2000
+      canSpawnInterval: 2000,
+      score: 10,
+      health: -10
     },
     star: {
       path: "./assets/models/star.glb",
       scale: 1,
       animationInterval: 6000,
-      canSpawnInterval: 2000
+      canSpawnInterval: 2000,
+      score: 50
     }
   },
   texture: {
