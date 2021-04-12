@@ -1,5 +1,8 @@
 export default {
   score: 0,
+  star: {
+    canSpawn: false,
+  },
   asteroid: {
     canSpawn: true,
   },
@@ -11,5 +14,4 @@ export default {
     shoot: false,
     canShoot: true,
   },
-  bullets: []
 };

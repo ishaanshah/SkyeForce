@@ -24,6 +24,7 @@ import Store from "../data/store";
 // objects
 import Player from "./objects/player";
 import Asteroid, { spawnAsteroids } from "./objects/asteroid";
+import Star, { spawnStars } from "./objects/stars";
 
 // utils
 import getCollisions from "../utils/collisions"
@@ -71,15 +72,10 @@ export default class Main {
     this.texture.load().then(() => {
       this.manager = new THREE.LoadingManager();
 
-      // Textures loaded, load models
-
+      // Load models
       // Load player model
       this.player = new Player(this.scene, this.manager, this.texture.textures);
       this.player.load(Config.models.player);
-
-      // Array to store asteroids
-      this.asteroids = [];
-      this.bullets = [];
 
       // Load asteroid models
       this.asteroidOne = new Asteroid(this.scene, this.manager, this.textures);
@@ -98,10 +94,23 @@ export default class Main {
       }
       this.asteroidTwo.load(asteroidTwoData);
 
+      // Load star model
+      this.star = new Star(this.scene, this.manager, this.textures);
+      this.star.load({
+        position: [1000, 1000, 1000],
+        ...Config.models.star
+      })
+
+      // Array to store asteroids, bullets and stars
+      this.asteroids = [];
+      this.bullets = [];
+      this.stars = [];
+
       // onProgress callback
       this.manager.onProgress = (item, loaded, total) => {
         console.log(`${item}: ${loaded} ${total}`);
       };
+
 
       // All loaders done now
       this.manager.onLoad = () => {
@@ -115,6 +124,10 @@ export default class Main {
         // Everything is now fully loaded
         Config.isLoaded = true;
         this.container.querySelector("#loading").style.display = "none";
+
+        setTimeout(() => {
+          Store.star.canSpawn = true
+        }, Config.models.star.canSpawnInterval / 2);
 
         // Start rendering now
         this.render();
@@ -148,14 +161,33 @@ export default class Main {
     // Get asteroid spawned
     this.asteroids = this.asteroids.concat(spawnAsteroids(this.asteroidOne, this.asteroidTwo))
 
+    // Get stars spawned
+    this.stars = this.stars.concat(spawnStars(this.star));
+
     // Check collisions
     const collidableAsteroids = this.asteroids.filter(asteroid => !asteroid.deleted);
     const collidableBullets = this.bullets.filter(bullet => !bullet.deleted);
+    const collidableStars = this.stars.filter(star=> !star.deleted);
 
     // Player - Asteroid
-    if(getCollisions(this.player.ref, collidableAsteroids.map(asteroid => asteroid.ref)).length > 0) {
+    let collisions= getCollisions(this.player.ref, collidableAsteroids.map(asteroid => asteroid.ref));
+    if(collisions.length > 0) {
       // TODO: Reduce health over here
     }
+    collisions.forEach(asteroidIdx => {
+      collidableAsteroids[asteroidIdx].unload();
+      collidableAsteroids[asteroidIdx].deleted = true;
+    })
+
+    // Player - Star
+    collisions = getCollisions(this.player.ref, collidableStars.map(star => star.ref));
+    if(collisions.length > 0) {
+      // TODO: Increase score here 
+    }
+    collisions.forEach(starIdx => {
+      collidableStars[starIdx].unload();
+      collidableStars[starIdx].deleted = true;
+    })
 
     // Bullet - Asteroid
     // Iterate in pairs, because bullets are stored as pairs
