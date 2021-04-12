@@ -1,5 +1,8 @@
 export default {
   score: 0,
+  asteroid: {
+    canSpawn: true,
+  },
   player: {
     direction: "",
     health: 100,
@@ -8,4 +11,5 @@ export default {
     shoot: false,
     canShoot: true,
   },
+  bullets: []
 };

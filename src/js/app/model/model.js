@@ -12,6 +12,8 @@ export default class Model {
     this.textures = textures;
     this.manager = manager;
 
+    this.deleted = false;
+
     this.ref = null;
   }
 
@@ -38,7 +40,7 @@ export default class Model {
         const group = new THREE.Group();
         nodes.forEach((node) => group.add(node));
         group.scale.multiplyScalar(modelData.scale);
-        group.position.set(...modelData.position);
+        group.position.set(...(modelData.position || [0, 0, 0]));
 
         BufferGeometryUtils.computeTangents(mesh.geometry);
 
@@ -58,7 +60,22 @@ export default class Model {
 
   unload() {
     this.scene.remove(this.ref);
+    this.ref.children.forEach(child => {
+      child.geometry.dispose();
+      child.material.dispose();
+    })
   }
 
   update() {}
+
+  clone() {
+    const model = new Model(this.scene, this.manager, this.textures);
+    model.ref = this.ref.clone();
+    this.scene.add(model.ref);
+
+    // To make sure that the matrixWorld is up to date for the boxhelpers
+    model.ref.updateMatrixWorld(true);
+
+    return model;
+  }
 }

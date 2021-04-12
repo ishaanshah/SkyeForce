@@ -5,11 +5,8 @@ import Config from "../../data/config";
 import Bullet from "./bullet";
 
 class Player extends Model {
-  constructor(scene, manager, textures) {
-    super(scene, manager, textures);
-  }
-
   update() {
+    const bullets = [];
     if (!Store.player.animating) {
       // Get rotations and positions
       let posX = "";
@@ -49,10 +46,8 @@ class Player extends Model {
       // Shoot
       if (Store.player.shoot && Store.player.canShoot) {
         // Create bullets
-        const bullets = [
-          new Bullet(this.scene, this.ref.position, 1),
-          new Bullet(this.scene, this.ref.position, -1),
-        ];
+        bullets.push(new Bullet(this.scene, this.ref.position, 1));
+        bullets.push(new Bullet(this.scene, this.ref.position, -1));
 
         // Make sure player cant shoot more than rate of fire
         Store.player.canShoot = false;
@@ -64,14 +59,20 @@ class Player extends Model {
         // Animation
         bullets.forEach((bullet) => {
           new TWEEN.Tween(bullet.ref.mesh.position)
-            .to({ z: 700 }, Config.models.bullets.animationInterval)
-            .onComplete(() => bullet.unload())
+            .to({ z: 150 }, Config.models.bullets.animationInterval)
+            .onComplete(() => {
+              bullet.unload();
+              bullet.deleted = true;
+            })
             .start();
         });
       }
     }
     Store.player.direction = "";
     Store.player.shoot = false;
+
+    // Return new objects created
+    return bullets;
   }
 }
 

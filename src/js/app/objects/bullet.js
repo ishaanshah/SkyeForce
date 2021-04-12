@@ -5,6 +5,7 @@ import Geometry from "../components/geometry";
 export default class Bullet {
   constructor(scene, shipPosition, side) {
     this.scene = scene;
+    this.deleted = false;
 
     this.ref = new Geometry(scene);
     this.ref.make("cylinder")(

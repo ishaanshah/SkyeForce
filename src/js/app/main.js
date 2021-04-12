@@ -19,9 +19,14 @@ import Interaction from "./managers/interaction";
 
 // data
 import Config from "./../data/config";
+import Store from "../data/store";
 
 // objects
 import Player from "./objects/player";
+import Asteroid, { spawnAsteroids } from "./objects/asteroid";
+
+// utils
+import getCollisions from "../utils/collisions"
 // -- End of imports
 
 // This class instantiates and ties all of the components together, starts the loading process and renders the main loop
@@ -66,9 +71,32 @@ export default class Main {
     this.texture.load().then(() => {
       this.manager = new THREE.LoadingManager();
 
-      // Textures loaded, load model
+      // Textures loaded, load models
+
+      // Load player model
       this.player = new Player(this.scene, this.manager, this.texture.textures);
       this.player.load(Config.models.player);
+
+      // Array to store asteroids
+      this.asteroids = [];
+      this.bullets = [];
+
+      // Load asteroid models
+      this.asteroidOne = new Asteroid(this.scene, this.manager, this.textures);
+      const asteroidOneData = {
+        position: [1000, 1000, 1000],
+        path: Config.models.asteroid.paths[0],
+        ...Config.models.asteroid
+      }
+      this.asteroidOne.load(asteroidOneData);
+
+      this.asteroidTwo = new Asteroid(this.scene, this.manager, this.textures);
+      const asteroidTwoData = {
+        position: [1000, 1000, 1000],
+        path: Config.models.asteroid.paths[1],
+        ...Config.models.asteroid
+      }
+      this.asteroidTwo.load(asteroidTwoData);
 
       // onProgress callback
       this.manager.onProgress = (item, loaded, total) => {
@@ -113,7 +141,43 @@ export default class Main {
 
     // Call any vendor or module frame updates here
     TWEEN.update();
-    this.player.update();
+
+    // Get bullets shot
+    this.bullets = this.bullets.concat(this.player.update());
+
+    // Get asteroid spawned
+    this.asteroids = this.asteroids.concat(spawnAsteroids(this.asteroidOne, this.asteroidTwo))
+
+    // Check collisions
+    const collidableAsteroids = this.asteroids.filter(asteroid => !asteroid.deleted);
+    const collidableBullets = this.bullets.filter(bullet => !bullet.deleted);
+
+    // Player - Asteroid
+    if(getCollisions(this.player.ref, collidableAsteroids.map(asteroid => asteroid.ref)).length > 0) {
+      // TODO: Reduce health over here
+    }
+
+    // Bullet - Asteroid
+    // Iterate in pairs, because bullets are stored as pairs
+    for (let i = 0; i < collidableBullets.length; i += 2) {
+      // TODO: Increase score here
+
+      // Delete asteroids
+      const collisions = getCollisions(collidableBullets[i].ref.mesh, collidableAsteroids.map(asteroid => asteroid.ref));
+      console.log(collisions.length);
+      collisions.forEach(asteroidIdx => {
+        collidableAsteroids[asteroidIdx].unload();
+        collidableAsteroids[asteroidIdx].deleted = true;
+      })
+
+      // Delete bullets
+      if (collisions.length) {
+        collidableBullets[i].unload();
+        collidableBullets[i].deleted = true;
+        collidableBullets[i+1].unload();
+        collidableBullets[i+1].deleted = true;
+      }
+    }
 
     // RAF
     requestAnimationFrame(this.render.bind(this)); // Bind the main class instead of window object

@@ -17,7 +17,6 @@ export default {
       path: "./assets/models/playerSpaceship.glb",
       scale: 1,
       position: [0, 0, 0],
-      speed: 10,
       animationInterval: 600,
       fireRate: 3, // Six bullets per second (one per gun)
     },
@@ -28,8 +27,14 @@ export default {
       radius: 0.1,
       length: 2,
       segments: 8,
-      animationInterval: 7000,
+      animationInterval: 1500,
     },
+    asteroid: {
+      paths: ["./assets/models/enemyAsteroid1.glb", "./assets/models/enemyAsteroid2.glb"],
+      scale: 1,
+      animationInterval: 6000,
+      canSpawnInterval: 1000
+    }
   },
   texture: {
     path: "./assets/textures/",
@@ -56,7 +61,7 @@ export default {
     position: [0, 10, -42],
     lookAt: [0, 0, 10],
     // Custom camera, uncomment to move around
-    // position: [20, 0, 0],
+    // position: [250, 0, 0],
     // lookAt: [0, 0, 0],
   },
   ambientLight: {
