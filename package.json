@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "run-s dev:js webpack-server",
     "build": "run-s build:dir build:js",
-    "prebuild": "run-s clean lint",
     "clean": "rimraf build",
     "lint": "eslint src/js/",
     "webpack-server": "webpack serve --env NODE_ENV=dev --progress --color --open --hot",

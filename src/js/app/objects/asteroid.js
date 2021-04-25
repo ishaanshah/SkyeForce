@@ -3,17 +3,17 @@ import TWEEN from "@tweenjs/tween.js";
 import Config from "../../data/config";
 import Store from "../../data/store";
 
-class Asteroid extends Model { }; 
+class Asteroid extends Model { } 
 
 function setupAnimations(asteroid) {
   // Postion animations
   new TWEEN.Tween(asteroid.ref.position)
-  .to({ z: -120}, Config.models.asteroid.animationInterval)
-  .onComplete(() => {
-    asteroid.unload();
-    asteroid.deleted = true;
-  })
-  .start();
+    .to({ z: -120}, Config.models.asteroid.animationInterval)
+    .onComplete(() => {
+      asteroid.unload();
+      asteroid.deleted = true;
+    })
+    .start();
   
   // Rotation animation
   let finalRotation;
@@ -45,14 +45,14 @@ function spawnAsteroids(asteroidOne, asteroidTwo) {
       const lane = Math.floor(Math.random() * 3);
       switch(lane) {
         case 0:
-        positions.push([7, 0, 150]);
-        break;
+          positions.push([7, 0, 150]);
+          break;
         case 1:
-        positions.push([0, 0, 150]);
-        break;
+          positions.push([0, 0, 150]);
+          break;
         case 2:
-        positions.push([-7, 0, 150]);
-        break;
+          positions.push([-7, 0, 150]);
+          break;
       }
       done = true;
     }
@@ -66,34 +66,34 @@ function spawnAsteroids(asteroidOne, asteroidTwo) {
       }
       switch(lane1) {
         case 0:
-        positions.push([7, 0, 150]);
-        break;
+          positions.push([7, 0, 150]);
+          break;
         case 1:
-        positions.push([0, 0, 150]);
-        break;
+          positions.push([0, 0, 150]);
+          break;
         case 2:
-        positions.push([-7, 0, 150]);
-        break;
+          positions.push([-7, 0, 150]);
+          break;
       }
       switch(lane2) {
         case 0:
-        positions.push([7, 0, 150]);
-        break;
+          positions.push([7, 0, 150]);
+          break;
         case 1:
-        positions.push([0, 0, 150]);
-        break;
+          positions.push([0, 0, 150]);
+          break;
         case 2:
-        positions.push([-7, 0, 150]);
-        break;
+          positions.push([-7, 0, 150]);
+          break;
       }
       done = true;
     }
 
     // Spawn three asteroids with 0.2 probability
     if (!done) {
-        positions.push([7, 0, 150]);
-        positions.push([0, 0, 150]);
-        positions.push([-7, 0, 150]);
+      positions.push([7, 0, 150]);
+      positions.push([0, 0, 150]);
+      positions.push([-7, 0, 150]);
     }
     
     setTimeout(() => {
