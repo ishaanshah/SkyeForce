@@ -76,6 +76,8 @@ export default class Main {
     this.texture.load().then(() => {
       this.manager = new THREE.LoadingManager();
 
+      this.scene.background = this.texture.textures.Background;
+
       // Load models
       // Load player model
       this.player = new Player(this.scene, this.manager, this.texture.textures);
@@ -115,7 +117,6 @@ export default class Main {
         console.log(`${item}: ${loaded} ${total}`);
       };
 
-
       // All loaders done now
       this.manager.onLoad = () => {
         // Set up interaction manager with the app now that the model is finished loading
@@ -136,7 +137,7 @@ export default class Main {
         setInterval(() => {
           console.log(this.score, this.health);
         }, 3000)
-
+        
         // Start rendering now
         this.render();
       };

@@ -47,7 +47,12 @@ export default {
   },
   texture: {
     path: "./assets/textures/",
-    imageFiles: [{ name: "UV", image: "UV_Grid_Sm.jpg" }],
+    imageFiles: [
+      {
+        name: "Background",
+        image: "Background.jpg"
+      }
+    ],
   },
   mesh: {
     enableHelper: false,
@@ -80,7 +85,7 @@ export default {
   directionalLight: {
     enabled: true,
     color: 0xf0f0f0,
-    intensity: 0.4,
+    intensity: 2,
     x: -75,
     y: 280,
     z: 150,
