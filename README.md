@@ -1,7 +1,15 @@
-# Three.js Webpack ES6 Boilerplate
-https://github.com/paulmg/ThreeJS-Webpack-ES6-Boilerplate/
+# Skye Force
+A group of asteroids heading towards the Earth at very high speeds. Collision with any one of the would lead to extinction of all living beings on earth. Are you up to the challenge of saving Earth by destroing the asteroids.
 
-A basic boilerplate for a Three.js project including the use of Webpack and ES6 syntax via Babel.
+Play the game at https://skyeforce.github.io
+
+## Trailer
+[![Skye Force (2021)](http://img.youtube.com/vi/6UNGyH458ZY/0.jpg)](http://www.youtube.com/watch?v=6UNGyH458ZY "Skye Force (2021)")
+
+## Controls
+* `A` to move left
+* `D` to move right
+* `Space` to shoot bullets
 
 ## Project Structure
 ```
@@ -52,9 +60,3 @@ You can run any of these individually if you'd like with the `npm run` command:
 * `dev:js` - Run webpack in dev environment without watch
 * `build:dir` - Copy files and folders from `src/public` to `build`
 * `build:js` - Run webpack in production environment
-
-## Input Controls
-* Press H to hide dat.GUI
-* Arrow controls will pan
-* Mouse left click will rotate/right click will pan
-* Scroll wheel zooms in and out
