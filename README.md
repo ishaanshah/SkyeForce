@@ -1,8 +1,6 @@
 # Skye Force
 A group of asteroids heading towards the Earth at very high speeds. Collision with any one of the would lead to extinction of all living beings on earth. Are you up to the challenge of saving Earth by destroing the asteroids.
 
-Play the game at https://skyeforce.github.io
-
 ## Trailer
 [![Skye Force (2021)](http://img.youtube.com/vi/6UNGyH458ZY/0.jpg)](http://www.youtube.com/watch?v=6UNGyH458ZY "Skye Force (2021)")
 
